@@ -3,7 +3,7 @@ import digitalio
 import time
 import pprint
 import pygame
-# test for github
+
 pygame.init()
 white = (255, 255, 255)
 green = (0, 255, 0)
