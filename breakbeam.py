@@ -18,16 +18,17 @@ win_width, win_height = 1920, 1080
 
 def beamer(surface=None):
     player_score = 0
-    play_time = 12.0
+    play_time = 120.0
     if surface is None:
         pygame.init()
         surface = pygame.display.set_mode((win_width, win_height), pygame.FULLSCREEN)
     display_surface = surface
+    
     yell.yella(surface=surface)
+    
     pygame.display.set_caption('Scoreboard')
     togo_font = pygame.font.Font('LiberationMono-Regular.ttf', 110)
     timer_font = pygame.font.Font('blubfont.ttf', 430)
-    
     score_font = pygame.font.Font('blubfont.ttf', 750)
 
     timer_renders = {num:timer_font.render(str(num), True, white, black) for num in range(121)}
@@ -114,6 +115,8 @@ def beamer(surface=None):
     print(f"total score = {display_score}")
     pp = pprint.PrettyPrinter(indent=2)
     pp.pprint(timestamp_hits)
+    
+    return player_score
     
 if __name__ == "__main__":
     beamer()
