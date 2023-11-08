@@ -6,32 +6,41 @@ import pygame
 
 pygame.init()
 white = (255, 255, 255)
-green = (0, 255, 0)
+green = (40, 255, 40)
 blue = (0, 0, 128)
-black = (60,60,60)
+black = (40, 40, 40)
+yellow = (0, 128, 0)
 win_width, win_height = 500, 275
 display_surface = pygame.display.set_mode((win_width, win_height))
 pygame.display.set_caption('Scoreboard')
-font = pygame.font.Font('freesansbold.ttf', 96)
-wordfont = pygame.font.Font('freesansbold.ttf', 172)
+timer_font = pygame.font.Font('blubfont.ttf', 96)
+word_font = pygame.font.Font('blubfont.ttf', 172)
+score_font = pygame.font.Font('blubfont.ttf', 250)
 starting_words = ["Sehet", "Blue82", "Omaha", "Hike!"]
-text_objects = {num:font.render(str(num), True, green, black) for num in range(121)}
-text_rects = {name:text.get_rect() for name, text in text_objects.items()}
-for rect in text_rects.values():
+word_delay = 500
+
+timer_renders = {num:timer_font.render(str(num), True, green, black) for num in range(121)}
+timer_rects = {name:text.get_rect() for name, text in timer_renders.items()}
+for rect in timer_rects.values():
     rect.center = (win_width - int(win_width/5), win_height // 2) #position timer countdown
+
 for word in starting_words:
-    text_objects[word] = wordfont.render(word, True, white, black)
-    text_rects[word] = text_objects[word].get_rect()
-    text_rects[word].center = (win_width // 2, win_height // 2)   #position starting hike
+    timer_renders[word] = word_font.render(word, True, white, black)
+    timer_renders[word] = timer_renders[word].get_rect()
+    timer_rects[word].center = (win_width // 2, win_height // 2)   #position starting hike
+
+digit_positions = [0.88, 0.64, 0.4]
+score_renders = {num:score_font.render(str(num), True, yellow, black) for num in range(10)}
+score_rect
 
 display_surface.fill(black)
 
 # must match order of pins to names
 #pinlist = [board.D20, board.D21, board.D23, board.D24, board.D17, board.D27]
 #sensor_names = ["A-A", "A_B", "B_A", "B_B", "C_A", "C_B"]
-pinlist = [board.D20, board.D23, board.D17, board.D27]
-sensor_names = ["A-A", "B_A", "C_A", "C_B"]
-point_list = [7, 4, 2, 2]
+pinlist = [board.D20, board.D23, board.D17, board.D27, board.D24]
+sensor_names = ["A-A", "B_A", "C_A", "C_B", "P1"]
+point_list = [7, 4, 2, 2, 0]
 award_points = {nm:award for nm, award in zip(sensor_names, point_list)}
 all_sensors = {s_name:digitalio.DigitalInOut(pin) for s_name, pin in zip(sensor_names, pinlist)}
 
@@ -56,6 +65,7 @@ print(f"starting experiment # {int(right_now)}")
 
 # begin throwing balls
 while (right_now < end_time) and running:
+    # check sensors and buttons
     if not action_flag:
         for sensor_name, sensor in all_sensors.items():
             if (not sensor.value):
@@ -67,7 +77,7 @@ while (right_now < end_time) and running:
                 action_flag = True
                 break
     
-    # some sensor in the bunch triggered
+    # some sensor in the bunch recently triggered
     if action_flag and (right_now > (last_hit + cutout_interval)):
         action_flag = False
     
@@ -80,8 +90,8 @@ while (right_now < end_time) and running:
     display_score = str(player_score).rjust(3,"0")
     display_surface.fill(black)
     display_surface.blit(text_objects[display_digit], text_rects[display_digit])
-
-    #for digit in display_score:
+    for digit in display_score:
+        display_surface.blit(text_objects[display_digit], 
         
     #display_surface.blit(text_objects[display_digit], text_rects[display_digit])
     pygame.display.update()
@@ -93,11 +103,6 @@ print("")
 print("  ----------")        
 print(" GAME OVER ")
 print(f"total score = {display_score}")
-#for sensor, hit_list in timestamp_hits.items():
-#    if len(hit_list):
-#        first = min(hit_list)
-#        last = max(hit_list)
-#        print(f"{sensor} sensor tripped for {last - first}")
 pp = pprint.PrettyPrinter(indent=2)
 pp.pprint(timestamp_hits)
 pygame.quit()
