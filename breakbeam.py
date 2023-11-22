@@ -1,24 +1,11 @@
-import board
-import digitalio
 import time
 import pprint
 import pygame
 import yell
+from constants import *
 
-cutout_interval = 0.1   #stop registering hits until this interval elapses
-pinlist = [board.D20, board.D23, board.D17, board.D27]
-sensor_names = ["A-A", "B_A", "C_A", "C_B"]
-point_list = [7, 4, 2, 2]
-white = (255, 255, 255)
-green = (0, 255, 0)
-blue = (0, 0, 128)
-black = (0, 0, 0)
-yellow = (255, 255, 0)
-win_width, win_height = 1920, 1080
-
-def beamer(surface=None):
+def beamer(surface=None, play_time=120):
     player_score = 0
-    play_time = 120.0
     if surface is None:
         pygame.init()
         surface = pygame.display.set_mode((win_width, win_height), pygame.FULLSCREEN)
@@ -53,12 +40,6 @@ def beamer(surface=None):
             rect.center = (win_width - int(win_width * position), int(win_height / 3.1))
 
     display_surface.fill(black)
-
-    award_points = {nm:award for nm, award in zip(sensor_names, point_list)}
-    all_sensors = {s_name:digitalio.DigitalInOut(pin) for s_name, pin in zip(sensor_names, pinlist)}
-    for break_beam in all_sensors.values():
-        break_beam.direction = digitalio.Direction.INPUT
-        break_beam.pull = digitalio.Pull.UP
         
     tally_count = {name:0 for name in all_sensors.keys()}
     timestamp_hits = {name:[] for name in all_sensors.keys()}

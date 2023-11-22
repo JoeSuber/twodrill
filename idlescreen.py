@@ -4,22 +4,13 @@ import board
 import digitalio
 import random
 import breakbeam
+from highscore import check_score
+from constants import *
 
-
-white = (255, 255, 255)
-green = (0, 255, 0)
-blue = (0, 0, 128)
-black = (0, 0, 0)
-yellow = (255, 255, 0)
-win_width, win_height = 1920, 1080
-interval = 0.04  # seconds
-cutout_interval = 0.1   #stop registering hits until this interval elapses
-grow_rate = 11    # in font size
-max_size = 400   # also font size
 start_message = "PRESS START TO PLAY"
-last_high_score, all_time_score = 0, 0
-score_message = f"LAST QB SCORED: {last_high_score}"
-all_time_text = f"ALL TIME HIGH: {all_time_score}"
+last_score = 0
+score_message = "LAST QUARTERBACK:0"
+all_time_text = f"ALL TIME HIGHS:"
 pinlist = [board.D24]
 sensor_names = ["P1"]
 
@@ -29,15 +20,15 @@ for break_beam in all_sensors.values():
     break_beam.pull = digitalio.Pull.UP
 
 pygame.init()
-screen = pygame.display.set_mode((win_width, win_height), pygame.FULLSCREEN)
-#screen = pygame.display.set_mode((win_width, win_height))
+#screen = pygame.display.set_mode((win_width, win_height), pygame.FULLSCREEN)
+screen = pygame.display.set_mode((win_width, win_height))
 
 score_font = pygame.font.Font('blubfont.ttf', 100)
 togo_font = pygame.font.Font('LiberationMono-Regular.ttf', 110)
 
 start_ren = togo_font.render(start_message, True, white, black)
 start_rect = start_ren.get_rect()
-start_rect.center = (win_width - int(win_width * 0.5), win_height - int(win_height * 0.5))
+start_rect.center = (win_width - int(win_width * 0.1), win_height - int(win_height * 0.5))
 
 score_ren = score_font.render(score_message, True, green, black)
 score_rect = score_ren.get_rect()
@@ -50,6 +41,9 @@ alltime_rect.center = (win_width - int(win_width * 0.5), win_height - int(win_he
 action_flag, running = False, True
 right_now = time.time()
 last_hit = right_now
+text_entry_timer = right_now
+floater = 1
+name_entry = ""
 
 while running:
     # check sensors and buttons
@@ -58,17 +52,16 @@ while running:
             if (not sensor.value):
                 last_hit = time.time()
                 action_flag = True
-                last_high_score = breakbeam.beamer(surface=screen)
-                score_message = f"LAST SCORE: {last_high_score}"
+                #start the game
+                last_score = breakbeam.beamer(surface=screen)
+                score_message, player_placed = check_score(score=last_score)
+                if player_placed:
+                    text_entry_timer = time.time() + text_time_delay
+                    
+                
                 score_ren = score_font.render(score_message, True, green, black)
                 score_rect = score_ren.get_rect()
                 score_rect.center = (win_width - int(win_width * 0.5), win_height - int(win_height * 0.1))
-                if last_high_score > all_time_score:
-                    all_time_score = last_high_score
-                    alltime_ren = score_font.render(f"ALL TIME HIGH: {all_time_score}", True, green, black)
-                    alltime_rect = alltime_ren.get_rect()
-                    alltime_rect.center = (win_width - int(win_width * 0.5), win_height - int(win_height * 0.91))
-                start_rect.center = (win_width - int(win_width * 0.5), win_height - int(win_height * 0.5))
                 break
     
     # some sensor in the bunch recently triggered
@@ -79,11 +72,21 @@ while running:
     for event in pygame.event.get(): 
         if event.type == pygame.QUIT: 
             running = False
-            
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_UP]:
-        running = False
-    start_rect.center = (start_rect.center[0]+random.choice((-1,1)), start_rect.center[1]+random.choice((-1,1)))
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
+                name_entry = name_entry[:-1]
+            elif event.key == pygame.RETURN:
+                player_placed = 0
+                entered_name = name_entry
+                
+            else:
+                name_entry += event.unicode
+                
+
+    start_rect.center = (start_rect.center[0]+floater, start_rect.center[1])
+    if (start_rect.center[0] > win_height) or (start_rect.center[0] < int(win_height * 0.5)):
+        floater = (floater * -1)
+    
     screen.fill(black)
     screen.blit(start_ren, start_rect)
     screen.blit(score_ren, score_rect)

@@ -1,14 +1,13 @@
 import time
 import pygame
+from constants import black, win_width, win_height, starting_words
 
 def yella(surface=None):
-    black = (0, 0, 0)
-    win_width, win_height = 1920, 1080
     interval = 0.04  # seconds
     grow_rate = 11    # in font size
     max_size = 400   # also font size
     font = "PibotoLtBoldItalic.ttf"
-    starting_words = ["DOWN", "SET", "BLUE 82", "OMAHA", "HIKE!"]
+    
     if surface is None:
         pygame.init()
         surface = pygame.display.set_mode((win_width, win_height))
