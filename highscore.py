@@ -19,9 +19,7 @@ def add_a_score(player_name=test_name, score=test_score):
     scores = shelve.open('scores')
     scores[player_name] = score
     scores.close()
-
-def get_player(screen=None):
-    pass
+    
     
 def check_score(score=test_score):
     sorted_scores = sorted_high_scores()
@@ -37,36 +35,38 @@ def check_score(score=test_score):
     
     return f"LAST QB: {score}", 0
 
-def render_scores(sorted_scores, score_screen=None)
+def render_scores(sorted_scores, score_screen=None):
     line_spacer = 50
     if score_screen is None:
         pygame.init()
         score_screen = pygame.display.set_mode((win_width, win_height))
-    score_font = pygame.font.Font('blubfont.ttf', 50)
+    score_font = pygame.font.Font('blubfont.ttf', 55)
     renders,rects = {}, {}
     for num, score in enumerate(sorted_scores):
         place = str(num +1)
         name = score[0]
-        digits = str(score[1].rjust(3, "0"))
+        digits = str(score[1]).rjust(3, "0")
         place_ren = score_font.render(place, True, yellow, black)
-        name_ren = score_font.render(name, True, green, black)
-        score_ren = score_font.render(digits, True, green, black)
-        wdth, _ = score_font.size(name)
+        name_ren = score_font.render(name, True, yellow, black)
+        score_ren = score_font.render(digits, True, yellow, black)
+        ws, _ = score_font.size(digits)
+        ns, _ = score_font.size(name)
+        ps, _ = score_font.size(place)
         place_rect = place_ren.get_rect()
         name_rect = name_ren.get_rect()
         score_rect = score_ren.get_rect()
-        place_rect.center = (win_width - int(win_width * 0.3), win_height - int(win_height * 0.9) + (line_spacer*num))
-        name_rect.center = (win_width - int(win_width * 0.4), win_height - int(win_height * 0.9) + (line_spacer*num))
-        score_rect.center = (win_width - int(win_width * 0.8) + (wdth // 2), win_height - int(win_height * 0.9) + (line_spacer*num))
+        place_rect.center = (win_width - int(win_width * 0.7) + (ps // 2), win_height - int(win_height * 0.83) + (line_spacer*num))
+        name_rect.center = (win_width - int(win_width * 0.65) + (ns // 2), win_height - int(win_height * 0.83) + (line_spacer*num))
+        score_rect.center = (win_width - int(win_width * 0.3) + (ws // 2), win_height - int(win_height * 0.83) + (line_spacer*num))
         renders[num+1] = (place_ren, name_ren, score_ren)
         rects[num+1] = (place_rect, name_rect, score_rect)
-        if (num+1) > maximum_high_scores:
+        if (num+1) >= maximum_high_scores:
             break
         
     return renders, rects
 
     
 if __name__ == "__main__":
-    scoreit()
+
     pygame.quit()
     

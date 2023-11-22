@@ -13,7 +13,7 @@ black = (0, 0, 0)
 yellow = (255, 255, 0)
 win_width, win_height = 1920, 1080
 starting_words = ["DOWN", "SET", "BLUE 82", "OMAHA", "HIKE!"]
-maximum_high_scores = 20
+maximum_high_scores = 15
 text_time_delay = 60
 
 award_points = {nm:award for nm, award in zip(sensor_names, point_list)}
