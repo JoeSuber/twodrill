@@ -21,8 +21,8 @@ def beamer(surface=None, play_time=120):
         if dir_name in sensor_names:
             samples[dir_name] = [pygame.mixer.Sound(str(x)) for x in soundpaths]
             
-    song = pygame.mixer.music.load(str(choice(noise_dict["MUSIC"])))
-    song.play()
+    pygame.mixer.music.load(str(choice(noise_dict["MUSIC"])))
+    pygame.mixer.music.play(-1)
     
     pygame.display.set_caption('Scoreboard')
     togo_font = pygame.font.Font('LiberationMono-Regular.ttf', 110)
@@ -91,9 +91,8 @@ def beamer(surface=None, play_time=120):
         if keys[pygame.K_UP]:
             running = False
         if keys[pygame.K_m]:
-            pygame.mixer.music.unload()
-            song = pygame.mixer.music.load(str(choice(noise_dict["MUSIC"])))
-            song.play()
+            pygame.mixer.music.load(str(choice(noise_dict["MUSIC"])))
+            pygame.mixer.music.play(-1)
             
         display_digit = abs(int(end_time - right_now))
         display_score = str(abs(player_score)).rjust(3,"0")
