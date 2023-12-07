@@ -19,8 +19,8 @@ for break_beam in all_sensors.values():
     break_beam.pull = digitalio.Pull.UP
 
 pygame.init()
-#screen = pygame.display.set_mode((win_width, win_height), pygame.FULLSCREEN)
-screen = pygame.display.set_mode((win_width, win_height))
+screen = pygame.display.set_mode((win_width, win_height), pygame.FULLSCREEN)
+#screen = pygame.display.set_mode((win_width, win_height))
 
 score_font = pygame.font.Font('blubfont.ttf', 100)
 togo_font = pygame.font.Font('LiberationMono-Regular.ttf', 110)
@@ -64,7 +64,6 @@ while running:
                 #start the game
                 last_score = breakbeam.beamer(surface=screen)
                 pygame.mixer.music.fadeout(500)
-                pygame.mixer.stop()
                 play_music = True
                 score_message, player_placed = check_score(score=last_score)
                 if player_placed:
@@ -87,13 +86,16 @@ while running:
         if (event.type == pygame.KEYDOWN):
             if event.key == pygame.K_ESCAPE:
                 running = False
+                #pass
             elif event.key == pygame.K_BACKSPACE:
                 name_entry = name_entry[:-1]
                 print(name_entry)
-            elif ((event.key == pygame.K_RETURN) or (len(name_entry) > 20)) and player_placed:
-                print("RETURN or max chars hit")
+            elif player_placed and ((event.key == pygame.K_RETURN) or (len(name_entry) > 20)):
+                print("RETURN or max chars or time limit hit")
                 pygame.mixer.music.fadeout(500)
                 player_placed = 0
+                if name_entry == "":
+                    name_entry = "GHOST"
                 add_a_score(player_name=name_entry, score=last_score)
                 sorted_scores = sorted_high_scores()
                 player_rens, player_rects = render_scores(sorted_scores, score_screen=screen)
@@ -105,12 +107,23 @@ while running:
 
             else:
                 name_entry += event.unicode
-                print(name_entry)
     
     if player_placed:
         blinker = "_" if (right_now < (int(right_now) + 0.5)) else " "
         start_ren = togo_font.render(name_entry + blinker, True, white, black)
-    #    start_rect = start_ren.get_rect()
+        if right_now > text_entry_timer:
+            pygame.mixer.music.fadeout(500)
+            player_placed = 0
+            if name_entry == "":
+                name_entry = "GHOST"
+            add_a_score(player_name=name_entry, score=last_score)
+            sorted_scores = sorted_high_scores()
+            player_rens, player_rects = render_scores(sorted_scores, score_screen=screen)
+            start_ren = togo_font.render(start_message, True, white, black)
+            score_ren = score_font.render(f"WELL DONE {name_entry}!", True, green, black)
+            score_rect = score_ren.get_rect()
+            score_rect.center = (win_width - int(win_width * 0.5), win_height - int(win_height * 0.1))   
+            name_entry = ""
                                                         
     start_rect.center = (start_rect.center[0], int(start_rect.center[1] + floater))
     if (start_rect.center[1] < int(win_height * 0.20)) or (start_rect.center[1] > int(win_height * 0.79)):
@@ -133,6 +146,7 @@ while running:
         play_music = False
         pygame.mixer.music.load(str(noise_dict["ENTRY"][0]))
         pygame.mixer.music.play()
+        
     right_now = time.time() # must be last instruction in while-loop
 
 pygame.quit()

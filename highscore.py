@@ -67,6 +67,6 @@ def render_scores(sorted_scores, score_screen=None):
 
     
 if __name__ == "__main__":
-
+    check_score()
     pygame.quit()
     
