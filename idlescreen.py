@@ -6,7 +6,7 @@ import breakbeam
 from highscore import check_score, add_a_score, render_scores, sorted_high_scores
 from constants import *
 
-start_message = "PRESS START TO PLAY"
+start_message = "PRESS START"
 last_score = 0
 score_message = "LAST QUARTERBACK: 0"
 all_time_text = "ALL TIME HIGHS:"
@@ -85,7 +85,12 @@ while running:
                 print("RETURN hit")
                 player_placed = 0
                 add_a_score(player_name=name_entry, score=last_score)
+                sorted_scores = sorted_high_scores()
                 player_rens, player_rects = render_scores(sorted_scores, score_screen=screen)
+                score_ren = score_font.render(f"WELL DONE {name_entry}!", True, green, black)
+                score_rect = score_ren.get_rect()
+                score_rect.center = (win_width - int(win_width * 0.5), win_height - int(win_height * 0.1))   
+                name_entry = ""
             else:
                 name_entry += event.unicode
                 print(name_entry)

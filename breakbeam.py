@@ -58,6 +58,8 @@ def beamer(surface=None, play_time=120):
                 if (not sensor.value):
                     tally_count[sensor_name] += 1
                     player_score += award_points[sensor_name]
+                    if not award_points[sensor_name]:
+                        end_time -= time_penalty
                     print(f" {sensor_name} = {tally_count[sensor_name]}  - ", end="")
                     last_hit = time.time()
                     timestamp_hits[sensor_name].append(last_hit)
@@ -77,8 +79,8 @@ def beamer(surface=None, play_time=120):
         if keys[pygame.K_UP]:
             running = False
             
-        display_digit = int(end_time - right_now)
-        display_score = str(player_score).rjust(3,"0")
+        display_digit = abs(int(end_time - right_now))
+        display_score = str(abs(player_score)).rjust(3,"0")
         display_surface.fill(black)
         display_surface.blit(timer_renders[display_digit], timer_rects[display_digit])
         for digit, position in zip(display_score, digit_positions.keys()):
