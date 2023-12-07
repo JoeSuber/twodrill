@@ -5,7 +5,7 @@ import pygame
 import yell
 from constants import *
 
-def beamer(surface=None, play_time=120):
+def beamer(surface=None):
     player_score = 0
     
     if surface is None:

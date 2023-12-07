@@ -1,7 +1,7 @@
 import shelve
 import pygame
 from operator import itemgetter
-from constants import win_width, win_height, green, yellow, black, maximum_high_scores
+from constants import win_width, win_height, yellow, black, maximum_high_scores
 
 test_name = "QB"
 test_score = 0
@@ -55,9 +55,9 @@ def render_scores(sorted_scores, score_screen=None):
         place_rect = place_ren.get_rect()
         name_rect = name_ren.get_rect()
         score_rect = score_ren.get_rect()
-        place_rect.center = (win_width - int(win_width * 0.7) + (ps // 2), win_height - int(win_height * 0.83) + (line_spacer*num))
-        name_rect.center = (win_width - int(win_width * 0.65) + (ns // 2), win_height - int(win_height * 0.83) + (line_spacer*num))
-        score_rect.center = (win_width - int(win_width * 0.3) + (ws // 2), win_height - int(win_height * 0.83) + (line_spacer*num))
+        place_rect.center = (win_width - int(win_width * 0.565) + (ps // 2), win_height - int(win_height * 0.83) + (line_spacer*num))
+        name_rect.center = (win_width - int(win_width * 0.52) + (ns // 2), win_height - int(win_height * 0.83) + (line_spacer*num))
+        score_rect.center = (win_width - int(win_width * 0.10) + (ws // 2), win_height - int(win_height * 0.83) + (line_spacer*num))
         renders[num+1] = (place_ren, name_ren, score_ren)
         rects[num+1] = (place_rect, name_rect, score_rect)
         if (num+1) >= maximum_high_scores:

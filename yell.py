@@ -10,7 +10,7 @@ def yella(surface=None):
     
     pygame.mixer.init()
     samples = [pygame.mixer.Sound(str(x)) for x in noise_dict["HIKE"]]
-    
+    pygame.mixer.music.fadeout(500)
     if surface is None:
         pygame.init()
         surface = pygame.display.set_mode((win_width, win_height))
