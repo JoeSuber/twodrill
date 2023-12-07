@@ -1,17 +1,28 @@
 import time
 import pprint
+from random import choice
 import pygame
 import yell
 from constants import *
 
 def beamer(surface=None, play_time=120):
     player_score = 0
+    
     if surface is None:
         pygame.init()
-        surface = pygame.display.set_mode((win_width, win_height), pygame.FULLSCREEN)
+        surface = pygame.display.set_mode((win_width, win_height))
     display_surface = surface
     
     yell.yella(surface=surface)
+    
+    pygame.mixer.init()
+    samples = {}
+    for dir_name, soundpaths in noise_dict.items():
+        if dir_name in sensor_names:
+            samples[dir_name] = [pygame.mixer.Sound(str(x)) for x in soundpaths]
+            
+    song = pygame.mixer.music.load(str(choice(noise_dict["MUSIC"])))
+    song.play()
     
     pygame.display.set_caption('Scoreboard')
     togo_font = pygame.font.Font('LiberationMono-Regular.ttf', 110)
@@ -56,6 +67,7 @@ def beamer(surface=None, play_time=120):
         if not action_flag:
             for sensor_name, sensor in all_sensors.items():
                 if (not sensor.value):
+                    choice(samples[sensor_name]).play()
                     tally_count[sensor_name] += 1
                     player_score += award_points[sensor_name]
                     if not award_points[sensor_name]:
@@ -78,6 +90,10 @@ def beamer(surface=None, play_time=120):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
             running = False
+        if keys[pygame.K_m]:
+            pygame.mixer.music.unload()
+            song = pygame.mixer.music.load(str(choice(noise_dict["MUSIC"])))
+            song.play()
             
         display_digit = abs(int(end_time - right_now))
         display_score = str(abs(player_score)).rjust(3,"0")

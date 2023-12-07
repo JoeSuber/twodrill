@@ -1,6 +1,6 @@
 import time
 import pygame
-from constants import black, win_width, win_height, starting_words
+from constants import black, win_width, win_height, starting_words, noise_dict
 
 def yella(surface=None):
     interval = 0.04  # seconds
@@ -8,15 +8,20 @@ def yella(surface=None):
     max_size = 400   # also font size
     font = "PibotoLtBoldItalic.ttf"
     
+    pygame.mixer.init()
+    samples = [pygame.mixer.Sound(str(x)) for x in noise_dict["HIKE"]]
+    
     if surface is None:
         pygame.init()
         surface = pygame.display.set_mode((win_width, win_height))
     display_surface = surface
     display_surface.fill(black)
-    for yell in starting_words:
+    for xq, yell in enumerate(starting_words):
         continue_flag = False
         font_size = 11
         last_time = 0.1
+        if xq < len(samples):
+            samples[xq].play()
         while not continue_flag:
             if time.time() > (last_time + interval):
                 last_time = time.time()
@@ -40,6 +45,10 @@ def yella(surface=None):
             display_surface.fill(black)
             display_surface.blit(render_phrase, rect_phrase)
             pygame.display.update()
+            
+    pygame.mixer.quit()
+    
+    return 0
 
 if __name__ == "__main__":
     yella()

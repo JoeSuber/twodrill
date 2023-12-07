@@ -1,6 +1,7 @@
 #constants
 import board
 import digitalio
+from pathlib import Path
 
 cutout_interval = 0.1   #stop registering hits until this interval elapses
 pinlist = [board.D20, board.D23, board.D17, board.D27, board.D25, board.D13, board.D18]
@@ -15,7 +16,9 @@ yellow = (255, 255, 0)
 win_width, win_height = 1920, 1080
 starting_words = ["DOWN", "SET", "BLUE 82", "OMAHA", "HIKE!"]
 maximum_high_scores = 15  #how many to keep and show
-text_time_delay = 60  
+text_time_delay = 60
+
+noise_dict = {x.name: list(Path(x).glob("*.wav")) for x in Path("sounds").iterdir()}
 
 award_points = {nm:award for nm, award in zip(sensor_names, point_list)}
 
