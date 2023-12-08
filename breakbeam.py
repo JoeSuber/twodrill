@@ -88,7 +88,6 @@ def beamer(surface=None):
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 running = False
-                pygame.mixer.quit()
                 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_m]:
