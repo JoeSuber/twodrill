@@ -86,10 +86,11 @@ def beamer(surface=None):
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT: 
                 running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                running = False
+                pygame.mixer.quit()
                 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP]:
-            running = False
         if keys[pygame.K_m]:
             pygame.mixer.music.load(str(choice(noise_dict["MUSIC"])))
             pygame.mixer.music.play(-1)

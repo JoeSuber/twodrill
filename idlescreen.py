@@ -29,13 +29,13 @@ start_ren = togo_font.render(start_message, True, white, black)
 start_rect = start_ren.get_rect()
 start_rect.center = (win_width - int(win_width * 0.78), win_height - int(win_height * 0.5))
 
-entry_rect = pygame.Rect(start_rect.x, start_rect.y, 737, 138)
+entry_rect = pygame.Rect(start_rect.x, start_rect.y, 737, 146)
 
-score_ren = score_font.render(score_message, True, green, black)
+score_ren = score_font.render(score_message, True, purple, black)
 score_rect = score_ren.get_rect()
 score_rect.center = (win_width - int(win_width * 0.5), win_height - int(win_height * 0.1))
 
-alltime_ren = score_font.render(all_time_text, True, green, black)
+alltime_ren = score_font.render(all_time_text, True, purple, black)
 alltime_rect = alltime_ren.get_rect()
 alltime_rect.center = (win_width - int(win_width * 0.5), win_height - int(win_height * 0.91))
 
@@ -83,15 +83,13 @@ while running:
     for event in pygame.event.get(): 
         if event.type == pygame.QUIT: 
             running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            running = False
+            pygame.mixer.quit()
         if (event.type == pygame.KEYDOWN):
-            if event.key == pygame.K_ESCAPE:
-                running = False
-                #pass
-            elif event.key == pygame.K_BACKSPACE:
+            if event.key == pygame.K_BACKSPACE:
                 name_entry = name_entry[:-1]
-                print(name_entry)
             elif player_placed and ((event.key == pygame.K_RETURN) or (len(name_entry) > 20)):
-                print("RETURN or max chars or time limit hit")
                 pygame.mixer.music.fadeout(500)
                 player_placed = 0
                 if name_entry == "":
@@ -104,7 +102,6 @@ while running:
                 score_rect = score_ren.get_rect()
                 score_rect.center = (win_width - int(win_width * 0.5), win_height - int(win_height * 0.1))   
                 name_entry = ""
-
             else:
                 name_entry += event.unicode
     
@@ -133,10 +130,10 @@ while running:
     for p, q in zip(player_rens.values(), player_rects.values()):
         for x in range(3):
             screen.blit(p[x], q[x])
-    entry_rect.y = start_rect.y-8
+    entry_rect.y = start_rect.y-10
     entry_rect.x = start_rect.x-8
     entry_rect.w = 1800
-    pygame.draw.rect(screen, (255,0,0), entry_rect, 10)
+    pygame.draw.rect(screen, white, entry_rect, 10)
     screen.blit(start_ren, start_rect)
     screen.blit(score_ren, score_rect)
     screen.blit(alltime_ren, alltime_rect)

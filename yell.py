@@ -9,6 +9,7 @@ def yella(surface=None):
     font = "PibotoLtBoldItalic.ttf"
     
     pygame.mixer.init()
+    noise_dict["HIKE"] = sorted(noise_dict["HIKE"], key=str, reverse=True)
     samples = [pygame.mixer.Sound(str(x)) for x in noise_dict["HIKE"]]
     pygame.mixer.music.fadeout(500)
     if surface is None:
@@ -45,8 +46,6 @@ def yella(surface=None):
             display_surface.fill(black)
             display_surface.blit(render_phrase, rect_phrase)
             pygame.display.update()
-            
-    pygame.mixer.quit()
     
     return 0
 

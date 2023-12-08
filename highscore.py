@@ -1,7 +1,7 @@
 import shelve
 import pygame
 from operator import itemgetter
-from constants import win_width, win_height, yellow, black, maximum_high_scores
+from constants import win_width, win_height, p_white, black, maximum_high_scores
 
 test_name = "QB"
 test_score = 0
@@ -46,9 +46,9 @@ def render_scores(sorted_scores, score_screen=None):
         place = str(num +1)
         name = score[0]
         digits = str(score[1]).rjust(3, "0")
-        place_ren = score_font.render(place, True, yellow, black)
-        name_ren = score_font.render(name, True, yellow, black)
-        score_ren = score_font.render(digits, True, yellow, black)
+        place_ren = score_font.render(place, True, p_white, black)
+        name_ren = score_font.render(name, True, p_white, black)
+        score_ren = score_font.render(digits, True, p_white, black)
         ws, _ = score_font.size(digits)
         ns, _ = score_font.size(name)
         ps, _ = score_font.size(place)
