@@ -18,3 +18,11 @@ the "good" are sensors for target holes A,B,C1, and C2
 the "bad" events are interceptions on IN1, IN2, IN3
 
 music and sounds are chosen randomly from the categories
+
+*system setup notes*
+Raspberry Pi 4 w raspbian 64 bit OS
+sensors are switches and IR sensors with signal pulled high
+https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/
+
+gotta do  this:
+pip3 install adafruit-io
