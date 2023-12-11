@@ -28,6 +28,8 @@ time_penalty = 7  #seconds
 
 Raspberry Pi 4 w raspbian 64 bit OS
 sensors are switches and IR sensors with signal pulled high
+
+git remote set-url origin https://joesuber:<token>@github.com/joesuber/twodrill
 https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/
 
 gotta do  this:
