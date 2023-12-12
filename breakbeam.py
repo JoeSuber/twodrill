@@ -20,7 +20,9 @@ def beamer(surface=None):
     for dir_name, soundpaths in noise_dict.items():
         if dir_name in sensor_names:
             samples[dir_name] = [pygame.mixer.Sound(str(x)) for x in soundpaths]
-            
+        if "BLIP" in dir_name:
+            samples[dir_name] = [pygame.mixer.Sound(str(x)) for x in soundpaths]
+  
     pygame.mixer.music.load(str(choice(noise_dict["MUSIC"])))
     pygame.mixer.music.play(-1)
     
@@ -67,7 +69,9 @@ def beamer(surface=None):
         if not action_flag:
             for sensor_name, sensor in all_sensors.items():
                 if (not sensor.value):
-                    choice(samples[sensor_name]).play()
+                    print(sensor_name)
+                    delaysound = choice(samples[sensor_name])
+                    choice(samples[sensor_name + "BLIP"]).play()
                     tally_count[sensor_name] += 1
                     player_score += award_points[sensor_name]
                     if not award_points[sensor_name]:
@@ -80,6 +84,7 @@ def beamer(surface=None):
         
         # some sensor in the bunch recently triggered
         if action_flag and (right_now > (last_hit + cutout_interval)):
+            delaysound.play()
             action_flag = False
         
         # pygame event loop
