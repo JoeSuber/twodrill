@@ -4,7 +4,7 @@ from operator import itemgetter
 from constants import win_width, win_height, p_white, black, maximum_high_scores
 
 test_name = "QB"
-test_score = 0
+test_score = 1
 
 def sorted_high_scores():
     
@@ -35,6 +35,9 @@ def check_score(score=test_score):
     
     return f"LAST QB: {score}", 0
 
+def fix_scores():
+    pass
+    
 def render_scores(sorted_scores, score_screen=None):
     line_spacer = 50
     if score_screen is None:
