@@ -1,0 +1,5 @@
+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
+
+git remote set-url origin https://joesuber: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@github.com/joesuber/twodrill
+
+git remote set-url origin https://joesuber:<token>@github.com/joesuber/twodrill
