@@ -31,6 +31,7 @@ sensors are switches and IR sensors with signal pulled high
 
 git remote set-url origin https://joesuber:<token>@github.com/joesuber/twodrill
 https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/
+sudo chmod a+x start.sh
 
 gotta do  this:
 pip3 install RPI.GPIO
