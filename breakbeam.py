@@ -27,11 +27,11 @@ def beamer(surface=None):
     pygame.mixer.music.play(-1)
     
     pygame.display.set_caption('Scoreboard')
-    togo_font = pygame.font.Font('LiberationMono-Regular.ttf', 110)
-    timer_font = pygame.font.Font('blubfont.ttf', 430)
-    score_font = pygame.font.Font('blubfont.ttf', 750)
+    togo_font = pygame.font.Font('LiberationMono-Regular.ttf', int(110*scaler))
+    timer_font = pygame.font.Font('blubfont.ttf', int(430*scaler))
+    score_font = pygame.font.Font('blubfont.ttf', int(750*scaler))
 
-    timer_renders = {num:timer_font.render(str(num), True, white, black) for num in range(121)}
+    timer_renders = {num:timer_font.render(str(num), True, white, black) for num in range(play_time + 1)}
     timer_rects = {name:text.get_rect() for name, text in timer_renders.items()}
     for rect in timer_rects.values():
         rect.center = (win_width - int(win_width/3.7), win_height - int(win_height / 5)) #position timer countdown

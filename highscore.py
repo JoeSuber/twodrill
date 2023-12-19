@@ -1,32 +1,39 @@
 import shelve
 import pygame
 from operator import itemgetter
-from constants import win_width, win_height, p_white, black, maximum_high_scores
+from constants import win_width, win_height, scaler, p_white, black, maximum_high_scores
 
 test_name = "QB"
 test_score = 1
 
 def sorted_high_scores():
+    localscores = {}
+    with shelve.open('newscores') as scoredb:
+        for x in range(maximum_high_scores):
+            try:
+                localscores[str(x+1)] = scoredb[str(x+1)]
+            except KeyError:
+                scoredb[str(x+1)] = ["", 0]
+                localscores[str(x+1)] = scoredb[str(x+1)]
     
-    scores = shelve.open('scores')
-    sorted_scores = sorted(scores.items(), key=itemgetter(1), reverse=True)
-    scores.close()
-    
+        sorted_scores = sorted(localscores.values(), key=itemgetter(1), reverse=True)
+        print(sorted_scores)
+        scoredb.close()
     return sorted_scores
 
 
 def add_a_score(player_name=test_name, score=test_score):
-    scores = shelve.open('scores')
-    scores[player_name] = score
-    scores.close()
+    for place, oldscore in enumerate(sorted_high_scores()):
+        if score >= oldscore[1]:
+            with shelve.open('newscores') as scoredb:
+                templine = scoredb[str(place+1)]
+                scoredb[str(place+1)] = [player_name, score]
+                score = templine[1]
+                player_name = templine[0]
     
     
 def check_score(score=test_score):
     sorted_scores = sorted_high_scores()
-    # fill up list if empty
-    if len(sorted_scores) < maximum_high_scores:
-        add_a_score(player_name=test_name+str(len(sorted_scores)+1), score=0)
-        check_score(score=0)
         
     for place, old_high_score in enumerate(sorted_scores):
         if (score > old_high_score[1]) and (place < maximum_high_scores):
@@ -35,15 +42,23 @@ def check_score(score=test_score):
     
     return f"LAST QB: {score}", 0
 
-def fix_scores():
-    pass
+
+def fix_scores(badperson=None):
+    bad_words = ["fuck", "asshole", "cunt", "bitch", "nigger", "tits", "pussy", "faggot"]
+    with shelve.open('newscores') as scoredb:
+        for place, line in scoredb.items():
+            q = [xword in line[0].lower() for xword in bad_words]
+            if (str(badperson) == place) or any(q):
+                scoredb[place] = ["dude", 0]
+                print(f"NAUGHTY {line[0]})
+
     
 def render_scores(sorted_scores, score_screen=None):
-    line_spacer = 50
+    line_spacer = int(50*scaler)
     if score_screen is None:
         pygame.init()
         score_screen = pygame.display.set_mode((win_width, win_height))
-    score_font = pygame.font.Font('blubfont.ttf', 55)
+    score_font = pygame.font.Font('blubfont.ttf', int(55*scaler))
     renders,rects = {}, {}
     for num, score in enumerate(sorted_scores):
         place = str(num +1)
@@ -70,6 +85,8 @@ def render_scores(sorted_scores, score_screen=None):
 
     
 if __name__ == "__main__":
-    check_score()
+    add_a_score(player_name="Fake!", score=34)
+    check_score(score=15)
+    sorted_high_scores()
     pygame.quit()
     

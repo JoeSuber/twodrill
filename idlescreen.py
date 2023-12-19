@@ -3,14 +3,14 @@ import pygame
 import board
 import digitalio
 import breakbeam
-from highscore import check_score, add_a_score, render_scores, sorted_high_scores
+from highscore import check_score, add_a_score, render_scores, sorted_high_scores, fix_scores
 from constants import *
 
 start_message = "PRESS START"
 last_score = 0
 score_message = "LAST QUARTERBACK: 0"
 all_time_text = "ALL TIME HIGHS:"
-pinlist = [board.D24]
+pinlist = [board.D24] #D26 on production
 sensor_names = ["P1"]
 
 all_sensors = {s_name:digitalio.DigitalInOut(pin) for s_name, pin in zip(sensor_names, pinlist)}
@@ -19,17 +19,17 @@ for break_beam in all_sensors.values():
     break_beam.pull = digitalio.Pull.UP
 
 pygame.init()
-screen = pygame.display.set_mode((win_width, win_height), pygame.FULLSCREEN)
-#screen = pygame.display.set_mode((win_width, win_height))
+#screen = pygame.display.set_mode((win_width, win_height), pygame.FULLSCREEN)
+screen = pygame.display.set_mode((win_width, win_height))
 
-score_font = pygame.font.Font('blubfont.ttf', 100)
-togo_font = pygame.font.Font('LiberationMono-Regular.ttf', 110)
+score_font = pygame.font.Font('blubfont.ttf', int(100*scaler))
+togo_font = pygame.font.Font('LiberationMono-Regular.ttf', int(110*scaler)) #110
 
 start_ren = togo_font.render(start_message, True, white, black)
 start_rect = start_ren.get_rect()
-start_rect.center = (win_width - int(win_width * 0.78), win_height - int(win_height * 0.5))
+start_rect.center = (win_width - int(win_width * 0.77), win_height - int(win_height * 0.5))
 
-entry_rect = pygame.Rect(start_rect.x, start_rect.y, 737, 146)
+entry_rect = pygame.Rect(start_rect.x, start_rect.y, int(737*scaler), int(150*scaler))
 
 score_ren = score_font.render(score_message, True, purple, black)
 score_rect = score_ren.get_rect()
@@ -63,6 +63,7 @@ while running:
                 action_flag = True
                 #start the game
                 last_score = breakbeam.beamer(surface=screen)
+                
                 pygame.mixer.music.fadeout(500)
                 play_music = True
                 score_message, player_placed = check_score(score=last_score)
@@ -114,6 +115,7 @@ while running:
             if name_entry == "":
                 name_entry = "GHOST"
             add_a_score(player_name=name_entry, score=last_score)
+            fix_scores(badperson=None)
             sorted_scores = sorted_high_scores()
             player_rens, player_rects = render_scores(sorted_scores, score_screen=screen)
             start_ren = togo_font.render(start_message, True, white, black)
@@ -130,10 +132,10 @@ while running:
     for p, q in zip(player_rens.values(), player_rects.values()):
         for x in range(3):
             screen.blit(p[x], q[x])
-    entry_rect.y = start_rect.y-10
-    entry_rect.x = start_rect.x-8
-    entry_rect.w = 1800
-    pygame.draw.rect(screen, white, entry_rect, 10)
+    entry_rect.y = start_rect.y-8
+    entry_rect.x = start_rect.x-6
+    entry_rect.w = int(1800*scaler)
+    pygame.draw.rect(screen, white, entry_rect, 8)
     screen.blit(start_ren, start_rect)
     screen.blit(score_ren, score_rect)
     screen.blit(alltime_ren, alltime_rect)
