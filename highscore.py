@@ -50,7 +50,7 @@ def fix_scores(badperson=None):
             q = [xword in line[0].lower() for xword in bad_words]
             if (str(badperson) == place) or any(q):
                 scoredb[place] = ["dude", 0]
-                print(f"NAUGHTY {line[0]})
+                print(f"NAUGHTY {line[0]}")
 
     
 def render_scores(sorted_scores, score_screen=None):
