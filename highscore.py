@@ -17,7 +17,6 @@ def sorted_high_scores():
                 localscores[str(x+1)] = scoredb[str(x+1)]
     
         sorted_scores = sorted(localscores.values(), key=itemgetter(1), reverse=True)
-        print(sorted_scores)
         scoredb.close()
     return sorted_scores
 
