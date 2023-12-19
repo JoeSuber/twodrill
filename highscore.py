@@ -43,14 +43,17 @@ def check_score(score=test_score):
     return f"LAST QB: {score}", 0
 
 
-def fix_scores(badperson=None):
+def fix_scores(badperson=None, player_score=0, pname="none"):
     bad_words = ["fuck", "shit", "asshole", "cunt", "bitch", "nigger", "tits", "pussy", "faggot"]
     with shelve.open('newscores') as scoredb:
         for place, line in scoredb.items():
             q = [xword in line[0].lower() for xword in bad_words]
             if (str(badperson) == place) or any(q):
-                scoredb[place] = ["dude", 0]
+                scoredb[place] = ["dude", player_score]
                 print(f"NAUGHTY {line[0]}")
+                return "DUDE!"
+
+    return pname
 
     
 def render_scores(sorted_scores, score_screen=None):

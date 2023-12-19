@@ -52,7 +52,7 @@ floater = 4
 name_entry = ""
 player_placed = 0
 play_music = True
-
+keyboard_action = False
 
 while running:
     # check sensors and buttons
@@ -91,35 +91,41 @@ while running:
             if event.key == pygame.K_BACKSPACE:
                 name_entry = name_entry[:-1]
             elif player_placed and ((event.key == pygame.K_RETURN) or (len(name_entry) > 20) or (right_now > text_entry_timer)):
-                pygame.mixer.music.fadeout(500)
-                badguy = None
-                try:
-                    name_entry = int(name_entry)
-                    if name_entry <= maximum_high_scores:
-                        badguy = player_placed
-                    else:
-                        name_entry = str(name_entry)
-                except ValueError:
-                    name_entry = name_entry.lower()
-                player_placed = 0
-                if name_entry == "":
-                    name_entry = "a ghost"
-                if not badguy:
-                    add_a_score(player_name=name_entry, score=last_score)
-                fix_scores(badperson=badguy)
-                sorted_scores = sorted_high_scores()
-                player_rens, player_rects = render_scores(sorted_scores, score_screen=screen)
-                start_ren = togo_font.render(start_message, True, white, black)
-                score_ren = score_font.render(f"WELL DONE {name_entry}!", True, green, black)
-                score_rect = score_ren.get_rect()
-                score_rect.center = (win_width - int(win_width * 0.5), win_height - int(win_height * 0.1))   
-                name_entry = ""
+                keyboard_action = True
             else:
                 name_entry += event.unicode
     
     if player_placed:
         blinker = "_" if (right_now < (int(right_now) + 0.5)) else " "
         start_ren = togo_font.render(name_entry + blinker, True, white, black)
+        if (right_now > text_entry_timer) or keyboard_action:
+            keyboard_action = False
+            pygame.mixer.music.fadeout(500)
+            print(f"right now {right_now}")
+            print(f"text timer {text_entry_timer}")
+            badguy = None
+            try:
+                name_entry = int(name_entry)
+                if name_entry <= maximum_high_scores:
+                    badguy = name_entry
+                else:
+                    name_entry = str(name_entry) # player enters big
+            except ValueError:
+                name_entry = name_entry.lower()
+            player_placed = 0
+            if name_entry == "":
+                name_entry = "a ghost"
+            if not badguy:
+                add_a_score(player_name=name_entry, score=last_score)
+            name_entry = fix_scores(badperson=badguy, player_score=last_score, pname=name_entry)
+            sorted_scores = sorted_high_scores()
+            player_rens, player_rects = render_scores(sorted_scores, score_screen=screen)
+            start_ren = togo_font.render(start_message, True, white, black)
+            score_ren = score_font.render(f"WELL DONE {name_entry}!", True, green, black)
+            score_rect = score_ren.get_rect()
+            score_rect.center = (win_width - int(win_width * 0.5), win_height - int(win_height * 0.1))   
+            name_entry = ""
+            
                                                         
     start_rect.center = (start_rect.center[0], int(start_rect.center[1] + floater))
     if (start_rect.center[1] < int(win_height * 0.20)) or (start_rect.center[1] > int(win_height * 0.79)):

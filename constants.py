@@ -21,7 +21,7 @@ win_width, win_height = 1280, 720
 scaler = win_width/1920
 starting_words = ["DOWN", "SET", "BLUE 82", "OMAHA", "HIKE!"]
 maximum_high_scores = 15  #how many to keep and show
-text_time_delay = 60
+text_time_delay = 20
 
 noise_dict = {x.name: list(Path(x).glob("*.wav")) for x in Path("sounds").iterdir()}
 #pprint(noise_dict)
