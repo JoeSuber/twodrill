@@ -38,9 +38,9 @@ def check_score(score=test_score):
     for place, old_high_score in enumerate(sorted_scores):
         if (score > old_high_score[1]) and (place < maximum_high_scores):
             print(f"{score} is the #{place+1}th score")
-            return "ENTER YOUR NAME, CHAMP!", place + 1
+            return f"SCORE: {score} - ENTER YOUR NAME!", place + 1
     
-    return f"LAST QB: {score}", 0
+    return f"LAST QB SCORED: {score}", 0
 
 
 def fix_scores(badperson=None, player_score=0, pname="none"):
@@ -49,7 +49,7 @@ def fix_scores(badperson=None, player_score=0, pname="none"):
         for place, line in scoredb.items():
             q = [xword in line[0].lower() for xword in bad_words]
             if (str(badperson) == place) or any(q):
-                scoredb[place] = ["dude", player_score]
+                scoredb[place] = ["dude!", player_score]
                 print(f"NAUGHTY {line[0]}")
                 return "DUDE!"
 
@@ -66,7 +66,7 @@ def render_scores(sorted_scores, score_screen=None):
     for num, score in enumerate(sorted_scores):
         place = str(num +1)
         name = score[0]
-        digits = str(score[1]).rjust(3, "0")
+        digits = str(score[1]).rjust(3, " ")
         place_ren = score_font.render(place, True, p_white, black)
         name_ren = score_font.render(name, True, p_white, black)
         score_ren = score_font.render(digits, True, p_white, black)

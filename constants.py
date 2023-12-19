@@ -6,6 +6,7 @@ from pathlib import Path
 
 play_time = 20
 cutout_interval = 0.3   #stop registering hits until this interval elapses
+#pinlist = [board.D20, board.D23, board.D17, board.D27, board.D25, board.D13, board.D18] #home
 pinlist = [board.D20, board.D23, board.D17, board.D27, board.D25, board.D13, board.D18]
 sensor_names = ["A", "B", "C1", "C2", "IN1", "IN2", "IN3"]
 point_list = [21, 7, 3, 3, 0, -6, -2]   # '0' is a time penalty
@@ -21,7 +22,7 @@ win_width, win_height = 1280, 720
 scaler = win_width/1920
 starting_words = ["DOWN", "SET", "BLUE 82", "OMAHA", "HIKE!"]
 maximum_high_scores = 15  #how many to keep and show
-text_time_delay = 20
+text_time_delay = 60
 
 noise_dict = {x.name: list(Path(x).glob("*.wav")) for x in Path("sounds").iterdir()}
 #pprint(noise_dict)

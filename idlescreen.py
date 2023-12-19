@@ -10,7 +10,7 @@ start_message = "PRESS START"
 last_score = 0
 score_message = "LAST QUARTERBACK: 0"
 all_time_text = "ALL TIME HIGHS:"
-pinlist = [board.D24] #D26 on production
+pinlist = [board.D26] #D26 on production D24 at home
 sensor_names = ["P1"]
 
 all_sensors = {s_name:digitalio.DigitalInOut(pin) for s_name, pin in zip(sensor_names, pinlist)}
@@ -19,8 +19,8 @@ for break_beam in all_sensors.values():
     break_beam.pull = digitalio.Pull.UP
 
 pygame.init()
-#screen = pygame.display.set_mode((win_width, win_height), pygame.FULLSCREEN)
-screen = pygame.display.set_mode((win_width, win_height))
+screen = pygame.display.set_mode((win_width, win_height), pygame.FULLSCREEN)
+#screen = pygame.display.set_mode((win_width, win_height))
 
 score_font = pygame.font.Font('blubfont.ttf', int(110*scaler))
 togo_font = pygame.font.Font('LiberationMono-Regular.ttf', int(110*scaler)) #110
@@ -101,8 +101,6 @@ while running:
         if (right_now > text_entry_timer) or keyboard_action:
             keyboard_action = False
             pygame.mixer.music.fadeout(500)
-            print(f"right now {right_now}")
-            print(f"text timer {text_entry_timer}")
             badguy = None
             try:
                 name_entry = int(name_entry)
