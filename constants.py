@@ -2,6 +2,7 @@
 import board
 import digitalio
 from pathlib import Path
+#from pprint import pprint
 
 play_time = 20
 cutout_interval = 0.3   #stop registering hits until this interval elapses
@@ -23,6 +24,7 @@ maximum_high_scores = 15  #how many to keep and show
 text_time_delay = 60
 
 noise_dict = {x.name: list(Path(x).glob("*.wav")) for x in Path("sounds").iterdir()}
+#pprint(noise_dict)
 
 award_points = {nm:award for nm, award in zip(sensor_names, point_list)}
 

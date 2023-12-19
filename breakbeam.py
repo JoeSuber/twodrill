@@ -7,7 +7,7 @@ from constants import *
 
 def beamer(surface=None):
     player_score = 0
-    final_countdown_time = 9.5
+    final_countdown_time = 11
     
     if surface is None:
         pygame.init()
@@ -23,6 +23,8 @@ def beamer(surface=None):
             samples[dir_name] = [pygame.mixer.Sound(str(x)) for x in soundpaths]
         if "BLIP" in dir_name:
             samples[dir_name] = [pygame.mixer.Sound(str(x)) for x in soundpaths]
+        if "COUNT" in dir_name:
+            samples[dir_name] = [pygame.mixer.Sound(str(x)) for x in soundpaths]
   
     pygame.mixer.music.load(str(choice(noise_dict["MUSIC"])))
     pygame.mixer.music.set_volume(0.6)
@@ -30,8 +32,8 @@ def beamer(surface=None):
     
     pygame.display.set_caption('Scoreboard')
     togo_font = pygame.font.Font('LiberationMono-Regular.ttf', int(110*scaler))
-    timer_font = pygame.font.Font('blubfont.ttf', int(430*scaler))
-    score_font = pygame.font.Font('blubfont.ttf', int(750*scaler))
+    timer_font = pygame.font.Font('blubfont.ttf', int(535*scaler))
+    score_font = pygame.font.Font('blubfont.ttf', int(650*scaler))
 
     timer_renders = {num:timer_font.render(str(num), True, white, black) for num in range(play_time + 1)}
     timer_rects = {name:text.get_rect() for name, text in timer_renders.items()}
@@ -42,14 +44,17 @@ def beamer(surface=None):
     togo_rect = render_togo.get_rect()
     togo_rect.center = (win_width - int(win_width * 0.73), win_height - int(win_height * 0.22))
 
-    render_home = togo_font.render("HOME:", True, white, black)
+    render_home = togo_font.render("SCORE:", True, white, black)
     home_rect = render_home.get_rect()
-    home_rect.center = (win_width - int(win_width * 0.89), win_height - int(win_height * 0.7))
+    home_rect.center = (win_width - int(win_width * 0.82), win_height - int(win_height * 0.7))
 
-    digit_positions = {"dig1":0.69, "dig2":0.44, "dig3":0.19}
+    #digit_positions = {"dig1":0.69, "dig2":0.44, "dig3":0.19}
+    digit_positions = {"dig1":0.61, "dig2":0.37, "dig3":0.14}
     score_renders, score_rects = {}, {}
     for slot, position in digit_positions.items():
         score_renders[slot] = {str(num):score_font.render(str(num), True, yellow, black) for num in range(10)}
+        score_renders[slot]["-"] = score_font.render("-", True, yellow, black)
+        score_renders[slot][" "] = score_font.render(" ", True, yellow, black)
         score_rects[slot] = {num:text.get_rect() for num, text in score_renders[slot].items()}
         for rect in score_rects[slot].values():
             rect.center = (win_width - int(win_width * position), int(win_height / 3.1))
@@ -107,7 +112,7 @@ def beamer(surface=None):
             final_countdown_time = -1
             
         display_digit = abs(int(end_time - right_now))
-        display_score = str(abs(player_score)).rjust(3,"0")
+        display_score = str(abs(player_score)).rjust(3," ")
         display_surface.fill(black)
         display_surface.blit(timer_renders[display_digit], timer_rects[display_digit])
         for digit, position in zip(display_score, digit_positions.keys()):

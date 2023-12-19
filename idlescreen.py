@@ -22,7 +22,7 @@ pygame.init()
 #screen = pygame.display.set_mode((win_width, win_height), pygame.FULLSCREEN)
 screen = pygame.display.set_mode((win_width, win_height))
 
-score_font = pygame.font.Font('blubfont.ttf', int(100*scaler))
+score_font = pygame.font.Font('blubfont.ttf', int(110*scaler))
 togo_font = pygame.font.Font('LiberationMono-Regular.ttf', int(110*scaler)) #110
 
 start_ren = togo_font.render(start_message, True, white, black)
@@ -94,8 +94,8 @@ while running:
                 pygame.mixer.music.fadeout(500)
                 badguy = None
                 try:
-                    name_entry == int(name_entry)
-                    if name_entry =< maximum_high_scores:
+                    name_entry = int(name_entry)
+                    if name_entry <= maximum_high_scores:
                         badguy = player_placed
                     else:
                         name_entry = str(name_entry)

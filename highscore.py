@@ -44,7 +44,7 @@ def check_score(score=test_score):
 
 
 def fix_scores(badperson=None):
-    bad_words = ["fuck", "asshole", "cunt", "bitch", "nigger", "tits", "pussy", "faggot"]
+    bad_words = ["fuck", "shit", "asshole", "cunt", "bitch", "nigger", "tits", "pussy", "faggot"]
     with shelve.open('newscores') as scoredb:
         for place, line in scoredb.items():
             q = [xword in line[0].lower() for xword in bad_words]
