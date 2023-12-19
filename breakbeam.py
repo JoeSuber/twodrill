@@ -7,6 +7,7 @@ from constants import *
 
 def beamer(surface=None):
     player_score = 0
+    final_countdown_time = 9.5
     
     if surface is None:
         pygame.init()
@@ -24,6 +25,7 @@ def beamer(surface=None):
             samples[dir_name] = [pygame.mixer.Sound(str(x)) for x in soundpaths]
   
     pygame.mixer.music.load(str(choice(noise_dict["MUSIC"])))
+    pygame.mixer.music.set_volume(0.6)
     pygame.mixer.music.play(-1)
     
     pygame.display.set_caption('Scoreboard')
@@ -98,6 +100,11 @@ def beamer(surface=None):
         if keys[pygame.K_m]:
             pygame.mixer.music.load(str(choice(noise_dict["MUSIC"])))
             pygame.mixer.music.play(-1)
+            
+        if (right_now + final_countdown_time) > end_time:
+            pygame.mixer.music.fadeout(final_countdown_time)
+            choice(samples["COUNT"]).play()
+            final_countdown_time = -1
             
         display_digit = abs(int(end_time - right_now))
         display_score = str(abs(player_score)).rjust(3,"0")
