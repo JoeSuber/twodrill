@@ -3,8 +3,6 @@ import pygame
 from operator import itemgetter
 from constants import win_width, win_height, scaler, p_white, black, maximum_high_scores
 
-test_name = "QB"
-test_score = 1
 
 def sorted_high_scores():
     localscores = {}
@@ -21,7 +19,7 @@ def sorted_high_scores():
     return sorted_scores
 
 
-def add_a_score(player_name=test_name, score=test_score):
+def add_a_score(player_name="", score=0):
     for place, oldscore in enumerate(sorted_high_scores()):
         if score >= oldscore[1]:
             with shelve.open('newscores') as scoredb:
