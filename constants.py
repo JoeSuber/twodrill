@@ -5,7 +5,7 @@ from pathlib import Path
 #from pprint import pprint
 
 play_time = 60
-cutout_interval = 0.3   #stop registering hits until this interval elapses
+cutout_interval = 0.35   #stop registering hits until this interval elapses
 #pinlist = [board.D20, board.D23, board.D17, board.D27, board.D25, board.D13, board.D18] #home
 pinlist = [board.D20, board.D23, board.D17, board.D27, board.D25, board.D13, board.D18]
 sensor_names = ["A", "B", "C1", "C2", "IN1", "IN2", "IN3"]

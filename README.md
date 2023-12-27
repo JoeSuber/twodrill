@@ -26,7 +26,7 @@ point_list = [21, 7, 3, 3, 0, -2, -6]   # '0' is a time penalty
 time_penalty = 10  #seconds
 
 git remote set-url origin https://joesuber:<token>@github.com/joesuber/twodrill
-https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/
+https://raspberrypi.stackexchange.com/questions/98944/launch-a-gui-tkinter-program-on-boot
 sudo chmod a+x start.sh
 
 gotta do  this:

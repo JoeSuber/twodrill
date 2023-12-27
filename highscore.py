@@ -21,15 +21,15 @@ def sorted_high_scores():
 
 def add_a_score(player_name="", score=0):
     for place, oldscore in enumerate(sorted_high_scores()):
-        if score >= oldscore[1]:
+        if score > oldscore[1]:
             with shelve.open('newscores') as scoredb:
                 templine = scoredb[str(place+1)]
                 scoredb[str(place+1)] = [player_name, score]
                 score = templine[1]
                 player_name = templine[0]
+
     
-    
-def check_score(score=test_score):
+def check_score(score=0):
     sorted_scores = sorted_high_scores()
         
     for place, old_high_score in enumerate(sorted_scores):
@@ -40,17 +40,35 @@ def check_score(score=test_score):
     return f"LAST QB SCORED: {score}", 0
 
 
-def fix_scores(badperson=None, player_score=0, pname="none"):
-    bad_words = ["fuck", "shit", "asshole", "cunt", "bitch", "nigger", "tits", "pussy", "faggot"]
+def kill_place(place):
     with shelve.open('newscores') as scoredb:
-        for place, line in scoredb.items():
-            q = [xword in line[0].lower() for xword in bad_words]
-            if (str(badperson) == place) or any(q):
-                scoredb[place] = ["dude!", player_score]
-                print(f"NAUGHTY {line[0]}")
-                return "DUDE!"
+        badline = scoredb[str(place)]
+        print(f"badline is {badline}")
+        scoredb[str(place)] = ["DUDE!!!", badline[1]]
+    with shelve.open('badwords') as profanity_db:
+        profanity_db[badline[0]] = badline[1]
+    return badline[0]
 
-    return pname
+def fix_scores():
+    change_count = 0
+    bad_words = ["fuck", "shit", "asshole", "cunt", "bitch", "nigger", "tits", "pussy", "faggot"]
+    with shelve.open("badwords") as profanity_db:
+        for x in profanity_db.keys():
+            bad_words.append(x)
+    changes = {}
+    with shelve.open("newscores") as scoredb:
+        for rank, player_line in scoredb.items():
+            checked = [bw in player_line[0] for bw in bad_words]
+            if len(checked) and any(checked):
+                changes[rank] = ["GO K-STATE!", player_line[1]]
+                print(f"rank {rank} is {player_line}")
+                print(f"list = {checked}")
+                change_count += 1
+        for change, line in changes.items():
+            scoredb[change] = line
+        
+    print(f"changes = {change_count}")            
+    return change_count
 
     
 def render_scores(sorted_scores, score_screen=None):

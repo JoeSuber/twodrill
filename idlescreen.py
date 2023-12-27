@@ -3,11 +3,12 @@ import pygame
 import board
 import digitalio
 import breakbeam
-from highscore import check_score, add_a_score, render_scores, sorted_high_scores, fix_scores
+from highscore import check_score, add_a_score, render_scores, sorted_high_scores, kill_place, fix_scores
 from constants import *
 
 last_score = 0
 pinlist = [board.D24] #D26 on production D24 at home
+#pinlist = [board.D26]
 sensor_names = ["P1"]
 
 all_sensors = {s_name:digitalio.DigitalInOut(pin) for s_name, pin in zip(sensor_names, pinlist)}
@@ -48,7 +49,7 @@ text_entry_timer = right_now
 floater = 4
 name_entry = ""
 player_placed = 0
-play_music = True
+play_music = False
 keyboard_action = False
 
 while running:
@@ -82,8 +83,13 @@ while running:
         if event.type == pygame.QUIT: 
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            running = False
-            pygame.mixer.quit()
+            b1, __, b3 = pygame.mouse.get_pressed(num_buttons=3)
+            if b1:
+                player_placed = 1000
+                text_entry_timer = right_now + text_time_delay
+            if b3:
+                running = False
+                pygame.mixer.quit()
         if (event.type == pygame.KEYDOWN):
             if event.key == pygame.K_BACKSPACE:
                 name_entry = name_entry[:-1]
@@ -96,24 +102,29 @@ while running:
         blinker = "_" if (right_now < (int(right_now) + 0.5)) else " "
         start_ren = togo_font.render(name_entry + blinker, True, white, black)
         
-        if (right_now > text_entry_timer) or keyboard_action:
+        if keyboard_action or (right_now > text_entry_timer):
+            text_entry_timer = right_now
+            play_music = True
             keyboard_action = False
             pygame.mixer.music.fadeout(500)
-            badguy = None
-            try:
-                name_entry = int(name_entry)
-                if name_entry <= maximum_high_scores:
-                    badguy = name_entry
-                else:
-                    name_entry = str(name_entry) # player enters big number
-            except ValueError:
-                name_entry = name_entry.lower()
+            badword = None
+            name_entry = name_entry.lower()
+            if "kill:" in name_entry[:5]:
+                __, kill_num = name_entry.split(":")
+                try:
+                    if int(kill_num) <= maximum_high_scores:
+                        badword = kill_place(abs(int(kill_num)))
+                        print(f"removed {badword} and added it to filter")
+                except ValueError:
+                    print(f"can't kill a player: {kill_num}")
+                name_entry = ""
             player_placed = 0
             if name_entry == "":
                 name_entry = "a ghost"
-            if not badguy:
+            if not badword:
                 add_a_score(player_name=name_entry, score=last_score)
-            name_entry = fix_scores(badperson=badguy, player_score=last_score, pname=name_entry)
+            if fix_scores() or ("kill:" in name_entry):
+                name_entry = "fixed it"
             sorted_scores = sorted_high_scores()
             player_rens, player_rects = render_scores(sorted_scores, score_screen=screen)
             start_ren = togo_font.render(start_message, True, white, black)
@@ -140,7 +151,7 @@ while running:
     screen.blit(alltime_ren, alltime_rect)
     pygame.display.update()
     
-    if play_music:
+    if play_music and (right_now > text_entry_timer):
         play_music = False
         pygame.mixer.music.load(str(noise_dict["ENTRY"][0]))
         pygame.mixer.music.play()
