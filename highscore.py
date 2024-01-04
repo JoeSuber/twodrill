@@ -43,7 +43,7 @@ def check_score(score=0):
 def kill_place(place):
     with shelve.open('newscores') as scoredb:
         badline = scoredb[str(place)]
-        print(f"badline is {badline}")
+        #print(f"badline is {badline}")
         scoredb[str(place)] = ["DUDE!!!", badline[1]]
     with shelve.open('badwords') as profanity_db:
         profanity_db[badline[0]] = badline[1]
@@ -61,13 +61,13 @@ def fix_scores():
             checked = [bw in player_line[0] for bw in bad_words]
             if len(checked) and any(checked):
                 changes[rank] = ["GO K-STATE!", player_line[1]]
-                print(f"rank {rank} is {player_line}")
-                print(f"list = {checked}")
+                #print(f"rank {rank} is {player_line}")
+                #print(f"list = {checked}")
                 change_count += 1
         for change, line in changes.items():
             scoredb[change] = line
         
-    print(f"changes = {change_count}")            
+    #print(f"changes = {change_count}")            
     return change_count
 
     

@@ -76,7 +76,7 @@ def beamer(surface=None):
         if not action_flag:
             for sensor_name, sensor in all_sensors.items():
                 if (not sensor.value):
-                    print(sensor_name)
+                    #print(sensor_name)
                     delaysound = choice(samples[sensor_name])
                     choice(samples[sensor_name + "BLIP"]).play()
                     tally_count[sensor_name] += 1

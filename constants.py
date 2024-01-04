@@ -6,8 +6,8 @@ from pathlib import Path
 
 play_time = 60
 cutout_interval = 0.35   #stop registering hits until this interval elapses
-#pinlist = [board.D20, board.D23, board.D17, board.D27, board.D25, board.D13, board.D18] #home
-pinlist = [board.D20, board.D23, board.D17, board.D27, board.D25, board.D13, board.D18]
+pinlist = [board.D20, board.D23, board.D17, board.D27, board.D25, board.D13, board.D18] #home
+#pinlist = [board.D17, board.D27, board.D22, board.D5, board.D6, board.D13, board.D19] #production
 sensor_names = ["A", "B", "C1", "C2", "IN1", "IN2", "IN3"]
 point_list = [21, 7, 3, 3, 0, -6, -2]   # '0' is a time penalty
 time_penalty = 10  #seconds
@@ -24,7 +24,6 @@ starting_words = ["DOWN", "SET", "BLUE 82", "OMAHA", "HIKE!"]
 score_message = "LAST QUARTERBACK: 0"
 all_time_text = "ALL TIME HIGHS:"
 start_message = "PRESS START"
-
 
 maximum_high_scores = 15  #how many to keep and show
 text_time_delay = 60
